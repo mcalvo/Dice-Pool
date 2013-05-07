@@ -1,0 +1,14 @@
+# Keep the same shell settings between screens
+#shell = $SHELL
+
+# Turn off annoying things that screen does
+vbell off
+startup_message off
+
+# Window list at the bottom.
+hardstatus on
+hardstatus alwayslastline
+
+#hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< %=%D %M %d %c"
+hardstatus string '%{= kK}%-Lw%{= KW}%50>%n%f %t%{= kK}%+Lw%< %{=kG}%-= %d%M %c:%s%{-}'
+

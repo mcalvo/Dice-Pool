@@ -1,0 +1,26 @@
+------------------------------------------------------------
+/home/mcalvo/dice/bin/pip run on Tue May  7 11:49:49 2013
+Downloading/unpacking MySQLdb
+  Getting page http://pypi.python.org/simple/MySQLdb
+  Could not fetch URL http://pypi.python.org/simple/MySQLdb: HTTP Error 404: Not Found (MySQLdb does not have any releases)
+  Will skip URL http://pypi.python.org/simple/MySQLdb when looking for download links for MySQLdb
+  Getting page http://pypi.python.org/simple/
+  Real name of requirement MySQLdb is MySQLdb
+  URLs to search for versions for MySQLdb:
+  * http://pypi.python.org/simple/MySQLdb/
+  Getting page http://pypi.python.org/simple/MySQLdb/
+  Could not fetch URL http://pypi.python.org/simple/MySQLdb/: HTTP Error 404: Not Found (MySQLdb does not have any releases)
+  Will skip URL http://pypi.python.org/simple/MySQLdb/ when looking for download links for MySQLdb
+  Could not find any downloads that satisfy the requirement MySQLdb
+No distributions at all found for MySQLdb
+Exception information:
+Traceback (most recent call last):
+  File "/home/mcalvo/dice/lib/python2.6/site-packages/pip-1.0.2-py2.6.egg/pip/basecommand.py", line 126, in main
+    self.run(options, args)
+  File "/home/mcalvo/dice/lib/python2.6/site-packages/pip-1.0.2-py2.6.egg/pip/commands/install.py", line 223, in run
+    requirement_set.prepare_files(finder, force_root_egg_info=self.bundle, bundle=self.bundle)
+  File "/home/mcalvo/dice/lib/python2.6/site-packages/pip-1.0.2-py2.6.egg/pip/req.py", line 954, in prepare_files
+    url = finder.find_requirement(req_to_install, upgrade=self.upgrade)
+  File "/home/mcalvo/dice/lib/python2.6/site-packages/pip-1.0.2-py2.6.egg/pip/index.py", line 152, in find_requirement
+    raise DistributionNotFound('No distributions at all found for %s' % req)
+DistributionNotFound: No distributions at all found for MySQLdb
