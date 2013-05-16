@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+	<p><p>
+	{% if error_message %} <p><strong> {{ error_message }}</strong></p>{% endif %}
+	<form action="." method="post">
+		{% csrf_token %}	
+		{{form.as_p}}
+		
+		<input type="submit" value="Create" />
+	</form>	
+	<br />
+<a href="/mons/">Back to the Monster Listing</a>
+</div>
+{% endblock %}

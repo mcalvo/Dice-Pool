@@ -1,0 +1,80 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+	<h1>{{ mon.name }}</h2>
+	<p><FONT SIZE = 3><b>Level:</b></FONT> {{mon.level}}
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<FONT SIZE = 3><b>Role:</b></FONT> {% if mon.eliteFlag %} Elite {% endif %} {% if mon.soloFlag%} Solo {% endif %} {{mon.get_role_display}} {% if mon.minionFlag %} Minion {% endif %}
+	<br /><br /><FONT SIZE = 2><b>Initiative</b></FONT> {{mon.init}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FONT SIZE = 2><b>Speed</b></FONT> {{mon.speed}}
+	<br /><FONT SIZE = 2><b>HP</b></FONT> {{mon.hp}} / {{mon.suddenDmg}}
+	<br /><FONT SIZE = 2><b>AC</b></FONT> {{mon.ac}}
+	<br /><FONT SIZE = 2><b>Fortitude</b></FONT> {{mon.fort}}
+	<br /><FONT SIZE = 2><b>Reflex</b></FONT> {{mon.ref}}
+	<br /><FONT SIZE = 2><b>Will</b></FONT> {{mon.will}}
+	
+	<h2>Skill Opposition</h2>
+	<ul>
+		<li>Novice (Easy DC): {{mon.eDC}}</li>
+		<li>Experienced (Medium DC): {{mon.mDC}}</li>
+		<li>Master (Hard DC): {{mon.hDC}}</li>
+	</ul>
+	
+	<h2>Attacks</h2>
+	
+	<p><FONT SIZE = 2><b>Base Attack Bonus vs. AC:</b></FONT> {{ mon.acAtk}}
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<FONT SIZE = 2><b>Base Attack Bonus vs. NAD:</b></FONT> {{ mon.nacAtk}}
+	
+	<br />
+	{% for attack in mon.attack_set.all %}
+		
+		<h3><u>{{attack.name}}</u></h3>
+		<b>Usage:</b> {{attack.get_action_display}} ({{attack.get_use_display}})
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<b>Range:</b> 
+		{% ifequal attack.attackType 'SEL' %}
+			Personal
+			{%else%}
+			{% ifequal attack.attackRange 0%}
+				Personal
+			{%else%}
+				{{attack.get_attackType_display}} 
+				{% ifequal attack.attackType 'SME' %}
+					{% if attack.attackRange > 1 %}
+						(Reach {{attack.attackRange}})
+					{% endif %}
+				{% else %}
+				 	{{attack.attackRange}}
+				{% endifequal %}
+
+			{% endifequal %}
+		{% endifequal %} <br />
+		
+		{% ifnotequal attack.attackType 'SEL' %}
+			<b>Attack: +</b>{{attack.atkBonus}} vs. {{attack.get_tardef_display}} 
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<b>Damage:</b> {{attack.damage}}<br />
+		{% endifnotequal %}
+				
+		{% if attack.effects %}<b>Additional Effects:</b> {{attack.effects}} {% endif %}
+		<br />
+	{% endfor %}
+	<br />
+	<a href="/mons/{{ mon.id }}/power/">Add a new power</a>
+	<br /><br />
+	<b>Note:</b> If adding effects to the attacks, remove one die of damage per effect.
+	
+	<p><p><a href="/mons/">Back to the Monster Listing</a>
+	<p><p><a href="/mons/create/">Add a new monster</a>
+</div>
+{% endblock %}

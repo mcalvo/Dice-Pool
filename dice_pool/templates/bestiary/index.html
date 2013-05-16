@@ -1,0 +1,28 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+{% if monster_list %}
+	<ul>
+	{% for mon in monster_list %}
+		<li><a href="/mons/{{ mon.id }}/">Level {{mon.level}} {{ mon.name }}</a></li>
+	{% endfor %}
+	</ul>
+{% else %}
+	<p>No creatures are available.</p>
+{% endif %}
+
+<a href="/mons/create/">Add a new monster</a>
+
+</div>
+{% endblock %}
