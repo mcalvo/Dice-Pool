@@ -1,3 +1,16 @@
 *.pyc
 .*.swp
-dice_pool/virt
+.bash_history
+.bash_logout
+.pip/*
+.screenrc
+.ssh/*
+.vim/*
+.viminfo
+.gitignore
+.vimrc
+.gitconfig
+.bashrc
+.bash_profile
+dice/*
+monopoly/*
