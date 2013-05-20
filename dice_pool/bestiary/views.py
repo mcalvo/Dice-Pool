@@ -3,8 +3,8 @@ from django.shortcuts import render_to_response, get_object_or_404, render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
-from dice_pool.bestiary import models as mcm 
-from dice_pool.bestiary import forms as mcf
+from bestiary import models as mcm 
+from bestiary import forms as mcf
 import math, random, unicodedata
 
 def index(request):

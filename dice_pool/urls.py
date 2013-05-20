@@ -7,5 +7,5 @@ urlpatterns = patterns('dice_pool.core.views',
     url(r'^$', 		'root', 	name='root'),	
 ) + patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^bestiary/', include('dice_pool.bestiary.urls')),
+    url(r'^bestiary/', include('bestiary.urls')),
 )

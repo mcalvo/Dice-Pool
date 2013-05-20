@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django import forms
 from django.forms import ModelForm
-from dice_pool.bestiary import choices
-from dice_pool.bestiary import models as mcm
+from bestiary import choices
+from bestiary import models as mcm
 import math, random
 
 # Create the form for USER monster creation

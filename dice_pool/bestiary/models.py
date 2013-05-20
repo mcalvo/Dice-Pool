@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django import forms
 from django.forms import ModelForm
-from dice_pool.bestiary import choices
+from bestiary import choices
 import math, random
 
 class Mon(models.Model):

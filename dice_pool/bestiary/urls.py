@@ -4,7 +4,7 @@ from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('dice_pool.bestiary.views',
+urlpatterns = patterns('bestiary.views',
     url(r'^$', 'index', name = 'monList'),
     url(r'^(?P<mon_id>\d+)/$', 'detail', name = 'detail'),
     url(r'^create/$', 'create'),
