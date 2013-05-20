@@ -7,14 +7,14 @@
 {% if monster_list %}
 	<ul>
 	{% for mon in monster_list %}
-		<li><a href="/mons/{{ mon.id }}/">Level {{mon.level}} {{ mon.name }}</a></li>
+		<li><a href="{% url 'bestiary_mon_detail' mon.id %}">Level {{mon.level}} {{ mon.name }}</a></li>
 	{% endfor %}
 	</ul>
 {% else %}
 	<p>No creatures are available.</p>
 {% endif %}
 
-<a href="/mons/create/">Add a new monster</a>
+<a href="{% url 'bestiary_create_mon' %}">Add a new monster</a>
 
 </div>
 {% endblock %}

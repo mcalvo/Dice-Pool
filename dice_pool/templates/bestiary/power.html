@@ -1,14 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
-
-{% block coltype %}colMS{% endblock %}
-
-{% block bodyclass %}dashboard{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
-
 {% block content %}
 <div id="content-main">
 	<h3> New Power for {{c.name}} </h3>
@@ -22,8 +14,8 @@
 		<input type="submit" value="Create" />
 	</form>
 <br />
-<a href="/mons/{{c.id}}"> Back to {{c.name}} details</a>	
+<a href="{% url 'bestiary_mon_detail' c.id %}"> Back to {{c.name}} details</a>	
 <br />
-<a href="/mons/">Back to the Monster Listing</a>
+<a href="{% url 'bestiary_mon_listing' %}">Back to the Monster Listing</a>
 </div>
 {% endblock %}

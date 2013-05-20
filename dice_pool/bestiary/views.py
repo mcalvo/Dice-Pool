@@ -20,7 +20,7 @@ def create(request):
     
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect(reverse('monList'))
+        return HttpResponseRedirect(reverse('bestiary_mon_listing'))
     else: return render(request, 'bestiary/create.html', {'form': form,})
 
 def power(request, mon_id):
@@ -28,5 +28,5 @@ def power(request, mon_id):
     form = mcf.AttackForm(c, request.POST or None,)
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect(reverse('detail', args =(mon_id,)))
+        return HttpResponseRedirect(reverse('bestiary_mon_detail', args =(mon_id,)))
     else: return render(request, 'bestiary/power.html', {'form': form, 'c': c})

@@ -1,14 +1,4 @@
 {% extends "admin/base_site.html" %}
-{% load i18n %}
-
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
-
-{% block coltype %}colMS{% endblock %}
-
-{% block bodyclass %}dashboard{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
-
 {% block content %}
 <div id="content-main">
 	<h1>{{ mon.name }}</h2>
@@ -70,11 +60,11 @@
 		<br />
 	{% endfor %}
 	<br />
-	<a href="/mons/{{ mon.id }}/power/">Add a new power</a>
+	<a href="{% url 'bestiary_create_power' mon.id %}">Add a new power</a>
 	<br /><br />
 	<b>Note:</b> If adding effects to the attacks, remove one die of damage per effect.
 	
-	<p><p><a href="/mons/">Back to the Monster Listing</a>
-	<p><p><a href="/mons/create/">Add a new monster</a>
+	<p><p><a href="{% url 'bestiary_mon_listing' %}">Back to the Monster Listing</a>
+	<p><p><a href="{% url 'bestiary_create_mon' %}">Add a new monster</a>
 </div>
 {% endblock %}
