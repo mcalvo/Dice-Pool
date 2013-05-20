@@ -17,4 +17,4 @@ class Migration(SchemaMigration):
         
     }
 
-    complete_apps = [bestiary']
+    complete_apps = ['bestiary']

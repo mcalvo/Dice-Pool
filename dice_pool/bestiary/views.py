@@ -9,11 +9,11 @@ import math, random, unicodedata
 
 def index(request):
     monster_list = mcm.Mon.objects.all().order_by('level')
-    return render_to_response('mons/index.html', {'monster_list': monster_list})
+    return render_to_response('bestiary/index.html', {'monster_list': monster_list})
    
 def detail(request, mon_id):
     m = get_object_or_404(mcm.Mon, pk=mon_id)
-    return render_to_response('mons/detail.html', {'mon': m})
+    return render_to_response('bestiary/detail.html', {'mon': m})
 
 def create(request):
     form = mcf.MonForm(request.POST or None)
@@ -21,7 +21,7 @@ def create(request):
     if form.is_valid():
         form.save()
         return HttpResponseRedirect(reverse('monList'))
-    else: return render(request, 'mons/create.html', {'form': form,})
+    else: return render(request, 'bestiary/create.html', {'form': form,})
 
 def power(request, mon_id):
     c = mcm.Mon.objects.get(id = mon_id)
@@ -29,4 +29,4 @@ def power(request, mon_id):
     if form.is_valid():
         form.save()
         return HttpResponseRedirect(reverse('detail', args =(mon_id,)))
-    else: return render(request, 'mons/power.html', {'form': form, 'c': c})
+    else: return render(request, 'bestiary/power.html', {'form': form, 'c': c})

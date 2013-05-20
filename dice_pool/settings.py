@@ -104,25 +104,29 @@ ROOT_URLCONF = 'urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'wsgi.application'
 
+import os
+SETTINGS_PATH = os.path.dirname(os.path.realpath(__file__))
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(SETTINGS_PATH, 'templates'),
 )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-	'south',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-	'bestiary'
+    'django.contrib.staticfiles',	
+
+    'south',
+
+    #Monster builder app
+    'bestiary'
 )
 
 # A sample logging configuration. The only tangible logging

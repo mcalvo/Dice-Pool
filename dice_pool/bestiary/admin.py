@@ -1,4 +1,4 @@
-from monsters.models import Mon, Attack
+from bestiary.models import Mon, Attack
 from django.contrib import admin
 
 #admin.site.register(Mon)
