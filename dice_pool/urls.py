@@ -3,9 +3,7 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('dice_pool.core.views',
-    url(r'^$', 		'root', 	name='root'),	
-) + patterns('',
+urlpatterns =  patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^bestiary/', include('bestiary.urls')),
 )
