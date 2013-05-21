@@ -6,26 +6,34 @@ from bestiary import models as mcm
 from bestiary import forms as mcf
 import math, random, unicodedata
 
-def index(request):
+def mon_listing(request):
     monster_list = mcm.Mon.objects.all().order_by('level')
-    return render_to_response('bestiary/index.html', {'monster_list': monster_list})
+    return render(request, 'bestiary/mon_list.html', {'monster_list': monster_list})
    
-def detail(request, mon_id):
-    m = get_object_or_404(mcm.Mon, pk=mon_id)
-    return render_to_response('bestiary/detail.html', {'mon': m})
+def mon_detail(request, mon_id):
+    m = get_object_or_404(mcm.Mon, id=mon_id)
+    return render(request, 'bestiary/mon_detail.html', {'mon': m})
 
-def create(request):
-    form = mcf.MonForm(request.POST or None)
-    
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect(reverse('bestiary_mon_listing'))
-    else: return render(request, 'bestiary/create.html', {'form': form,})
+def create_mon(request, mon_id=None, mon=None):
+	if mon_id and not mon:
+		mon = mcm.Mon.objects.get(id=mon_id)
 
-def power(request, mon_id):
+	form = mcf.MonForm(request.POST or mon)
+
+	if form.is_valid():
+		return HttpResponseRedirect(reverse('bestiary_mon_listing'))
+	else: 
+		return render(request, 'bestiary/mon_create.html', {'form': form,})
+
+def create_power(request, mon_id, power_id=None, power=None):
     c = mcm.Mon.objects.get(id = mon_id)
-    form = mcf.AttackForm(c, request.POST or None,)
+	if power_id and not power:
+		power = mcm.Attack.objects.get(id=power_id)
+
+	form = mcf.AttackForm(c, request.POST or power)
+
     if form.is_valid():
         form.save()
         return HttpResponseRedirect(reverse('bestiary_mon_detail', args =(mon_id,)))
-    else: return render(request, 'bestiary/power.html', {'form': form, 'c': c})
+    else: 
+		return render(request, 'bestiary/power_create.html', {'form': form, 'c': c})

@@ -6,7 +6,6 @@ from bestiary import choices
 from bestiary import models as mcm
 import math, random
 
-# Create the form for USER monster creation
 class MonForm(ModelForm):
     level = forms.IntegerField(label='Level', min_value=1, max_value=50)
 
