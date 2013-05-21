@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>The Dice Pool - {%block title%}Main Menu{%endblock%}</title>
+        {% block head %}
+		{% endblock %}
+	</head>
+	<body>
+		{% block body_override %}
+		<div id="menu">
+			{% block breadcrumbs_override %}
+			<div id="breadcrumbs">
+				<p>{% block breadcrumbs %}{% endblock %}</p>
+			</div>
+			{% endblock %}
+			{% block menu %}
+			{% endblock %}
+		</div>
+		<div class="prepend-top span24">
+			{% block body%}
+			{% endblock %}
+		</div>
+		{% endblock %}
+	</body>
+</html>

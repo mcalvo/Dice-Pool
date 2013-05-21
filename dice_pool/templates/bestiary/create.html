@@ -1,9 +1,8 @@
-{% extends "admin/base_site.html" %}
-{% load i18n %}
+{% extends "panel.html" %}
 
-{% block content %}
-<div id="content-main">
-	<p><p>
+{% block body %}
+	<br />
+	<br />
 	{% if error_message %} <p><strong> {{ error_message }}</strong></p>{% endif %}
 	<form action="." method="post">
 		{% csrf_token %}	
@@ -13,5 +12,4 @@
 	</form>	
 	<br />
 <a href="{% url 'bestiary_mon_listing' %}">Back to the Monster Listing</a>
-</div>
 {% endblock %}

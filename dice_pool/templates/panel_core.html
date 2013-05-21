@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block menu %}
+	<div class="span-24 menu">
+		<ul>
+			{% block main_menu %}
+				<li><a href="{% url 'root' %}">Home</a></li>
+				<li><a href="{% url 'bestiary_mon_listing' %}">Bestiary</a></li>
+				<li>Encounter Generator</li>
+				<li>Campaign Editor</li>
+				<li>Dice Bag</li>
+				<li>Character Sheet Manager</li>
+			{% endblock %}
+		</ul>
+	</div>
+{% endblock %}
+{% block body %}
+	<p>Welcome. This is filler text. In the future, we could have site announcements
+	or some sort of social aspect for 'advertising' someone's adventures. Maybe have
+	some sort of 'popularity' rating or something. For now, it's just text.</p>
+{% endblock %}

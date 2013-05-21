@@ -1,9 +1,6 @@
-{% extends "admin/base_site.html" %}
-{% load i18n %}
+{% extends "panel.html" %}
 
-{% block content %}
-<div id="content-main">
-
+{% block body %}
 {% if monster_list %}
 	<ul>
 	{% for mon in monster_list %}

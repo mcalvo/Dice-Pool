@@ -1,6 +1,5 @@
-{% extends "admin/base_site.html" %}
-{% block content %}
-<div id="content-main">
+{% extends "panel.html" %}
+{% block body %}
 	<h1>{{ mon.name }}</h2>
 	<p><FONT SIZE = 3><b>Level:</b></FONT> {{mon.level}}
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -66,5 +65,4 @@
 	
 	<p><p><a href="{% url 'bestiary_mon_listing' %}">Back to the Monster Listing</a>
 	<p><p><a href="{% url 'bestiary_create_mon' %}">Add a new monster</a>
-</div>
 {% endblock %}

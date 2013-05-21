@@ -1,8 +1,6 @@
-{% extends "admin/base_site.html" %}
-{% load i18n %}
+{% extends "panel.html" %}
 
-{% block content %}
-<div id="content-main">
+{% block body %}
 	<h3> New Power for {{c.name}} </h3>
 	<p><p>
 	{% if error_message %} <p><strong> {{ error_message }}</strong></p>{% endif %}
@@ -17,5 +15,4 @@
 <a href="{% url 'bestiary_mon_detail' c.id %}"> Back to {{c.name}} details</a>	
 <br />
 <a href="{% url 'bestiary_mon_listing' %}">Back to the Monster Listing</a>
-</div>
 {% endblock %}
