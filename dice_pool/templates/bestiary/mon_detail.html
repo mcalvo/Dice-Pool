@@ -3,9 +3,9 @@
 	<h1>{{ mon.name }}</h2>
 	<p><FONT SIZE = 3><b>Level:</b></FONT> {{mon.level}}
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<FONT SIZE = 3><b>Role:</b></FONT> {% if mon.eliteFlag %} Elite {% endif %} {% if mon.soloFlag%} Solo {% endif %} {{mon.get_role_display}} {% if mon.minionFlag %} Minion {% endif %}
+	<FONT SIZE = 3><b>Role:</b></FONT> {% if mon.elite %} Elite {% endif %} {% if mon.solo %} Solo {% endif %} {{ mon.role }} {% if mon.minion %} Minion {% endif %}
 	<br /><br /><FONT SIZE = 2><b>Initiative</b></FONT> {{mon.init}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FONT SIZE = 2><b>Speed</b></FONT> {{mon.speed}}
-	<br /><FONT SIZE = 2><b>HP</b></FONT> {{mon.hp}} / {{mon.suddenDmg}}
+	<br /><FONT SIZE = 2><b>HP</b></FONT> {{mon.hp}} / {{mon.gibHP}}
 	<br /><FONT SIZE = 2><b>AC</b></FONT> {{mon.ac}}
 	<br /><FONT SIZE = 2><b>Fortitude</b></FONT> {{mon.fort}}
 	<br /><FONT SIZE = 2><b>Reflex</b></FONT> {{mon.ref}}
@@ -20,9 +20,9 @@
 	
 	<h2>Attacks</h2>
 	
-	<p><FONT SIZE = 2><b>Base Attack Bonus vs. AC:</b></FONT> {{ mon.acAtk}}
+	<p><FONT SIZE = 2><b>Base Attack Bonus vs. AC:</b></FONT> {{ mon.acAtkBase}}
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<FONT SIZE = 2><b>Base Attack Bonus vs. NAD:</b></FONT> {{ mon.nacAtk}}
+	<FONT SIZE = 2><b>Base Attack Bonus vs. NAD:</b></FONT> {{ mon.nacAtkBase}}
 	
 	<br />
 	{% for attack in mon.attack_set.all %}
@@ -59,10 +59,9 @@
 		<br />
 	{% endfor %}
 	<br />
-	<a href="{% url 'bestiary_create_power' mon.id %}">Add a new power</a>
 	<br /><br />
 	<b>Note:</b> If adding effects to the attacks, remove one die of damage per effect.
 	
-	<p><p><a href="{% url 'bestiary_mon_listing' %}">Back to the Monster Listing</a>
-	<p><p><a href="{% url 'bestiary_create_mon' %}">Add a new monster</a>
+	<p><p><a href="{% url bestiary_mon_listing %}">Back to the Monster Listing</a>
+	<p><p><a href="{% url bestiary_create_mon %}">Add a new monster</a>
 {% endblock %}
