@@ -65,7 +65,7 @@ class Faction(Definition):
    pass
 
 class Monster(models.Model):
-   name = models.CharField(max_length = 50)
+   name = models.CharField(max_length = 100)
    level = models.IntegerField()
    role = models.ForeignKey(MonsterRole)
    faction = models.ForeignKey(Faction)
@@ -109,23 +109,60 @@ class Monster(models.Model):
       self.hDC = 17 + round(level *.64) + round(level/5)
       self.save()
 
-"""
-class Attack(models.Model):
-    monster = models.ForeignKey(Monster)
-    name = models.CharField(max_length = 20)
-    attackType = models.CharField(max_length = 3, choices = choices.ATTACK_TYPES)
-    attackRange = models.CharField(max_length=10)
-    #Which defense the target attacks
-    tardef = models.CharField(verbose_name = 'target defense', max_length = 1, choices = choices.DEFENSES) 
-    use = models.CharField(max_length = 2, choices = choices.USABILITY)
-    action = models.CharField(max_length = 2, choices = choices.ACTION)
-    multi_attack = models.BooleanField()
-    atkBonus = models.IntegerField()
-    damage = models.CharField(max_length = 30)
-    avg_dmg = models.IntegerField()
-    effects = models.CharField(verbose_name = 'Additional Effects', blank=True, null=True, max_length = 70)
+class Usage(Definition):
+   limitedUsage = models.CharField(max_length=2,choices=choices.USAGE)
 
-    def __unicode__(self):
-        return self.name
+class Ability(models.Model):
+   monster = models.ForeignKey(Monster)
+   usage = models.ForeignKey(Usage)
+   action = models.CharField(max_length=2,choices=choices.ACTION)
+   range = models.IntegerField()#0 for Personal, 1 for Melee
+   area = models.IntegerField()#0 for Single Target, 1 for Burst/Blast 1, etc. 
+   bloodiedLimit = models.BooleanField("Only usable when bloodied?")
+   isRanged = models.BooleanField("Considered a Ranged Attack?")
+   oaFlag = models.BooleanField("Provokes Opportunity Attack?")
+   aura = models.BooleanField("Is an Aura?")
+   effect = models.CharField(max_length=150,blank=True,null=True)
+   aftereffect = models.CharField(blank=True,null=True,max_length=150)
+   
+   def get_range(self):
+      str = "" 
 
-"""
+      if self.aura:
+         str = "Aura %s" % self.area
+
+      elif self.area == 0:
+         if self.range == 0:
+            str = "Personal"
+         else:
+            if self.isRanged:
+               str = "Ranged %s" % self.range
+            else:
+               str = "Melee / Touch" if self.range == 1 else "Melee %s" % self.range
+      else:
+         if self.range == 0:
+            str = "Close Burst %s" % self.area
+         elif self.range == 1:
+            str = "Close Blast %s" % self.area
+         else:
+            str = "Area Burst %s in %s" % (self.area, self.range)
+      return str 
+
+class Attack(Ability):
+   attackBonus = models.IntegerField()
+   targetDefense = models.CharField(max_length=1,choices=choices.DEFENSES,verbose_name='Target defense') 
+   averageDamage = models.IntegerField()
+   damageLine = models.CharField(max_length=150)
+   multiStrike = models.BooleanField()
+   onHit = models.CharField(blank=True,null=True,max_length=150)
+    
+   def __unicode__(self):
+      return "%s (%s %s)" % (self.name, self.usage, self.action)
+   
+   def _rebalance(self):
+         self.attackBonus = bhelpers.toHit(self.monster,self.range,self.targetDef)
+         hasEffect = True if self.effect or self.aftereffect or self.onHit else False  
+         self.averageDamage = bhelpers.averageDamage(self.monster.level,self.monster.minion,self.monster.role.heavyHitter,self.range,self.area,self.limited,self.multiStrike,hasEffect)
+         self.damageLine = bhelpers.damageToDice(self.averageDamage,self.monster.minion,self.onHit)
+         self.save()
+    

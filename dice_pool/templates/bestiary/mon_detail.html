@@ -27,8 +27,8 @@
 	<br />
 	{% for attack in mon.attack_set.all %}
 		
-		<h3><u>{{attack.name}}</u></h3>
-		<b>Usage:</b> {{attack.get_action_display}} ({{attack.get_use_display}})
+		<h3><u>{{ attack.name }}</u></h3>
+		<b>Usage:</b> {{attack.isplay}} ({{attack.get_use_display}})
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<b>Range:</b> 
 		{% ifequal attack.attackType 'SEL' %}

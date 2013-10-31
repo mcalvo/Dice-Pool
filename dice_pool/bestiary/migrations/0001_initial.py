@@ -39,7 +39,7 @@ class Migration(SchemaMigration):
         # Adding model 'Monster'
         db.create_table('bestiary_monster', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('level', self.gf('django.db.models.fields.IntegerField')()),
             ('role', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['bestiary.MonsterRole'])),
             ('faction', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['bestiary.Faction'])),
@@ -62,6 +62,44 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('bestiary', ['Monster'])
 
+        # Adding model 'Usage'
+        db.create_table('bestiary_usage', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('limitedUsage', self.gf('django.db.models.fields.CharField')(max_length=2)),
+        ))
+        db.send_create_signal('bestiary', ['Usage'])
+
+        # Adding model 'Ability'
+        db.create_table('bestiary_ability', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('monster', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['bestiary.Monster'])),
+            ('usage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['bestiary.Usage'])),
+            ('action', self.gf('django.db.models.fields.CharField')(max_length=2)),
+            ('range', self.gf('django.db.models.fields.IntegerField')()),
+            ('area', self.gf('django.db.models.fields.IntegerField')()),
+            ('bloodiedLimit', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('isRanged', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('oaFlag', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('aura', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('effect', self.gf('django.db.models.fields.CharField')(max_length=150, null=True, blank=True)),
+            ('aftereffect', self.gf('django.db.models.fields.CharField')(max_length=150, null=True, blank=True)),
+        ))
+        db.send_create_signal('bestiary', ['Ability'])
+
+        # Adding model 'Attack'
+        db.create_table('bestiary_attack', (
+            ('ability_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['bestiary.Ability'], unique=True, primary_key=True)),
+            ('attackBonus', self.gf('django.db.models.fields.IntegerField')()),
+            ('targetDefense', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('averageDamage', self.gf('django.db.models.fields.IntegerField')()),
+            ('damageLine', self.gf('django.db.models.fields.CharField')(max_length=150)),
+            ('multiStrike', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('onHit', self.gf('django.db.models.fields.CharField')(max_length=150, null=True, blank=True)),
+        ))
+        db.send_create_signal('bestiary', ['Attack'])
+
 
     def backwards(self, orm):
         # Deleting model 'MonsterRole'
@@ -73,8 +111,42 @@ class Migration(SchemaMigration):
         # Deleting model 'Monster'
         db.delete_table('bestiary_monster')
 
+        # Deleting model 'Usage'
+        db.delete_table('bestiary_usage')
+
+        # Deleting model 'Ability'
+        db.delete_table('bestiary_ability')
+
+        # Deleting model 'Attack'
+        db.delete_table('bestiary_attack')
+
 
     models = {
+        'bestiary.ability': {
+            'Meta': {'object_name': 'Ability'},
+            'action': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
+            'aftereffect': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'area': ('django.db.models.fields.IntegerField', [], {}),
+            'aura': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'bloodiedLimit': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'effect': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'isRanged': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'monster': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bestiary.Monster']"}),
+            'oaFlag': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'range': ('django.db.models.fields.IntegerField', [], {}),
+            'usage': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bestiary.Usage']"})
+        },
+        'bestiary.attack': {
+            'Meta': {'object_name': 'Attack', '_ormbases': ['bestiary.Ability']},
+            'ability_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['bestiary.Ability']", 'unique': 'True', 'primary_key': 'True'}),
+            'attackBonus': ('django.db.models.fields.IntegerField', [], {}),
+            'averageDamage': ('django.db.models.fields.IntegerField', [], {}),
+            'damageLine': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
+            'multiStrike': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'onHit': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'targetDefense': ('django.db.models.fields.CharField', [], {'max_length': '1'})
+        },
         'bestiary.faction': {
             'Meta': {'ordering': "['-active', 'name']", 'object_name': 'Faction'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -98,7 +170,7 @@ class Migration(SchemaMigration):
             'mDC': ('django.db.models.fields.IntegerField', [], {}),
             'minion': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'nacAtkBase': ('django.db.models.fields.IntegerField', [], {}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'reflex': ('django.db.models.fields.IntegerField', [], {}),
             'role': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bestiary.MonsterRole']"}),
             'solo': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -122,6 +194,13 @@ class Migration(SchemaMigration):
             'refModMin': ('django.db.models.fields.IntegerField', [], {}),
             'willModMax': ('django.db.models.fields.IntegerField', [], {}),
             'willModMin': ('django.db.models.fields.IntegerField', [], {})
+        },
+        'bestiary.usage': {
+            'Meta': {'ordering': "['-active', 'name']", 'object_name': 'Usage'},
+            'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'limitedUsage': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
 
