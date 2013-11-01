@@ -30,7 +30,7 @@ class MonsterForm(forms.ModelForm):
     class Meta:
         model = mcm.Monster
         fields = ('name', 'level', 'role', 'minion', 'elite', 'solo', 'speed')
-        exclude = ('ac', 'fortitude', 'reflex', 'will', 'initiative', 'hp', 'suddenDmg', 'acAtkBase', 'nacAtkBase', 'eDC', 'mDC', 'hDC',)
+        #exclude = ('ac', 'fortitude', 'reflex', 'will', 'initiative', 'hp', 'suddenDmg', 'acAtkBase', 'nacAtkBase', 'eDC', 'mDC', 'hDC',)
 
 class AttackForm(forms.ModelForm):
    def __init__(self, monster, *args, **kwargs):
@@ -62,4 +62,4 @@ class AttackForm(forms.ModelForm):
 
    class Meta:
       model = mcm.Attack
-      exclude = ('creature','atkBonus', 'avg_dmg', 'damage')
+      exclude = ['monster', 'attackBonus', 'damageLine']

@@ -108,11 +108,15 @@ class Monster(models.Model):
       self.mDC = 12 + round(level * 53) + round(level/10)
       self.hDC = 17 + round(level *.64) + round(level/5)
       self.save()
+      
+      for attack in self.attack_set.all():
+         attack._rebalance()
 
 class Usage(Definition):
    limitedUsage = models.CharField(max_length=2,choices=choices.USAGE)
 
 class Ability(models.Model):
+   name = models.CharField(max_length=70, blank=True, null=True)
    monster = models.ForeignKey(Monster)
    usage = models.ForeignKey(Usage)
    action = models.CharField(max_length=2,choices=choices.ACTION)
@@ -123,9 +127,9 @@ class Ability(models.Model):
    oaFlag = models.BooleanField("Provokes Opportunity Attack?")
    aura = models.BooleanField("Is an Aura?")
    effect = models.CharField(max_length=150,blank=True,null=True)
-   aftereffect = models.CharField(blank=True,null=True,max_length=150)
+   aftereffect = models.CharField(max_length=150,blank=True,null=True)
    
-   def get_range(self):
+   def atkRangeDisplay(self):
       str = "" 
 
       if self.aura:
@@ -138,7 +142,7 @@ class Ability(models.Model):
             if self.isRanged:
                str = "Ranged %s" % self.range
             else:
-               str = "Melee / Touch" if self.range == 1 else "Melee %s" % self.range
+               str = "Melee / Touch" if self.range == 1 else "Reach %s" % self.range
       else:
          if self.range == 0:
             str = "Close Burst %s" % self.area
@@ -154,7 +158,7 @@ class Attack(Ability):
    averageDamage = models.IntegerField()
    damageLine = models.CharField(max_length=150)
    multiStrike = models.BooleanField()
-   onHit = models.CharField(blank=True,null=True,max_length=150)
+   onHit = models.CharField(max_length=150,blank=True,null=True)
     
    def __unicode__(self):
       return "%s (%s %s)" % (self.name, self.usage, self.action)

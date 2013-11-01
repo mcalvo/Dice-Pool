@@ -51,8 +51,6 @@ def damageToDice(damage,minion, onHit):
    numDie = int(round(num/den))
    staticDamage = int(round(damage*.3))    
    calc = "{0}d{1}+{2}".format(numDie, dieType, staticDamage)
-   if onHit:
-      calc.append(" and %s" % onHit)  
    return calc
     
 def whichDie(avgDmg):

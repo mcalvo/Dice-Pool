@@ -1,2 +1,3 @@
 *.pyc
 /virt/*
+dice_pool/bestiary/migrations/*
