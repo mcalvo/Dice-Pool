@@ -1,17 +1,16 @@
 from django.contrib import admin
-from bestiary.models import Monster
+from bestiary import models as bestiarymodels
 
 #admin.site.register(Mon)
-"""
-class AttacksInline(admin.TabularInline):
-    model = Attack
-    extra = 1
-"""
 
 class MonsterAdmin(admin.ModelAdmin):
-    #inlines = [AttacksInline]
-    list_display = ('name', 'level', 'role')
-    list_filter = ['level']
-    search_fields = ['name']
+   list_display = ('name', 'level', 'role')
+   list_filter = ['level']
+   search_fields = ['name']
 
-admin.site.register(Monster, MonsterAdmin)
+admin.site.register(bestiarymodels.Usage)
+admin.site.register(bestiarymodels.Faction)
+admin.site.register(bestiarymodels.MonsterRole)
+admin.site.register(bestiarymodels.Ability)
+admin.site.register(bestiarymodels.Attack)
+admin.site.register(bestiarymodels.Monster, MonsterAdmin)
