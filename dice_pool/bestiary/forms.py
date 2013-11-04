@@ -11,32 +11,59 @@ class MonsterForm(forms.ModelForm):
 
    def save(self, *args, **kwargs):
       record = super(MonsterForm, self).save(commit=False, *args, **kwargs)
-      if record:
-         random.seed()
-         record.initiative = record.level*.60
-         record.hp = bhelpers.hpCalc(record.level, record.role, record.minion, record.elite, record.solo)
-         record.gibHP = bhelpers.gibCalc(record.hp, record.role, record.minion, record.elite, record.solo)
-         record.ac = bhelpers.defenseCalc(14, record.role.acModMin, acModMax, record.level)
-         record.fortitude = bhelpers.defenseCalc(12, record.role.fortModMin, record.role.fortModMax, record.level)
-         record.reflex = bhelpers.defenseCalc(12,record.role.refModMin, record.role.refModMax, record.level) 
-         record.will = bhelpers.defenseCalc(12,record.role.willModMin, record.role.willModMax, record.level)
-         record.acAtkBase = random.randint(-1, 1) + record.level + 5
-         record.nacAtkBase = random.randint(-1, 1) + record.level + 3
-         record.eDC = 7 + round(record.level * .53)
-         record.mDC = 12 + round(record.level * 53) + round(record.level/10)
-         record.hDC = 17 + round(record.level *.64) + round(record.level/5)
+      random.seed()
+      record.initiative = record.level*.60
+      record.hp = bhelpers.hpCalc(record.level, record.role, record.minion, record.elite, record.solo)
+      record.gibHP = bhelpers.gibCalc(record.hp, record.role, record.minion, record.elite, record.solo)
+      record.ac = bhelpers.defenseCalc(14, record.role.acModMin, record.role.acModMax, record.level)
+      record.fortitude = bhelpers.defenseCalc(12, record.role.fortModMin, record.role.fortModMax, record.level)
+      record.reflex = bhelpers.defenseCalc(12,record.role.refModMin, record.role.refModMax, record.level) 
+      record.will = bhelpers.defenseCalc(12,record.role.willModMin, record.role.willModMax, record.level)
+      record.acAtkBase = random.randint(-1, 1) + record.level + 5
+      record.nacAtkBase = random.randint(-1, 1) + record.level + 3
+      record.eDC = 7 + round(record.level * .53)
+      record.mDC = 12 + round(record.level * 53) + round(record.level/10)
+      record.hDC = 17 + round(record.level *.64) + round(record.level/5)
       record.save(*args, **kwargs)
+   
+   class Meta:
+      model = mcm.Monster
+      fields = ('name', 'level', 'role', 'minion', 'elite', 'solo', 'speed')
+      #exclude = ('ac', 'fortitude', 'reflex', 'will', 'initiative', 'hp', 'suddenDmg', 'acAtkBase', 'nacAtkBase', 'eDC', 'mDC', 'hDC',)
 
-    class Meta:
-        model = mcm.Monster
-        fields = ('name', 'level', 'role', 'minion', 'elite', 'solo', 'speed')
-        #exclude = ('ac', 'fortitude', 'reflex', 'will', 'initiative', 'hp', 'suddenDmg', 'acAtkBase', 'nacAtkBase', 'eDC', 'mDC', 'hDC',)
+class AbilityForm(forms.ModelForm):
+   def __init__(self, monster, *args, **kwargs):
+      super(AbilityForm, self).__init__(*args, **kwargs)
+      self.monster = monster
+
+   def clean(self):
+      range = self.cleaned_data.get('range')
+      area = self.cleaned_data.get('area')
+      
+      if range < 0:
+         raise forms.ValidationError("Range minimum is 0.")
+      
+      if area < 0:
+         raise forms.ValidationError("Area minimum is 0.")
+      
+      return self.cleaned_data 
+        
+   def save(self, *args, **kwargs):
+      record = super(AbilityForm, self).save(commit=False,*args,**kwargs)
+      #Brand new, needs to be processed.
+      if not self.instance.id:   
+         record.monster = self.monster
+      record.save()
+
+   class Meta:
+      model = mcm.Ability
+      exclude = ['monster']
 
 class AttackForm(forms.ModelForm):
    def __init__(self, monster, *args, **kwargs):
       super(AttackForm, self).__init__(*args, **kwargs)
       self.monster = monster
-   
+
    def clean(self):
       range = self.cleaned_date.get('range')
       area = self.cleaned_data.get('area')
@@ -49,7 +76,7 @@ class AttackForm(forms.ModelForm):
       
       return self.cleaned_data 
         
-    def save(self, *args, **kwargs):
+   def save(self, *args, **kwargs):
       record = super(AttackForm, self).save(commit=False,*args,**kwargs)
       #Brand new, needs to be processed.
       if not self.instance.id:   

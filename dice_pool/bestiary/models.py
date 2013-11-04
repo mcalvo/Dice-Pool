@@ -44,7 +44,7 @@ class MonsterRole(Definition):
    heavyHitter = models.BooleanField("Sacrifice accuracy for damage?") #For brutes, mostly.
    
    def __unicode__(self):
-      if heavyHitter:
+      if self.heavyHitter:
          return "Brute %s" % self.name
       return "%s" % self.name
       
@@ -60,15 +60,12 @@ class MonsterRole(Definition):
       
       if self.willModMin >= self.willModMax:
          self.willModMin = self.willModMax - 3
-
-class Faction(Definition):
-   pass
+      super(MonsterRole, self).save(*args, **kwargs)
 
 class Monster(models.Model):
    name = models.CharField(max_length = 100)
    level = models.IntegerField()
    role = models.ForeignKey(MonsterRole)
-   faction = models.ForeignKey(Faction)
    minion = models.BooleanField(verbose_name = 'Minion?')
    elite = models.BooleanField(verbose_name = 'Elite?')
    solo = models.BooleanField(verbose_name = 'Solo?')
@@ -98,14 +95,14 @@ class Monster(models.Model):
       self.initiative = level * .60
       self.hp = bhelpers.hpCalc(level, role, minion, elite, solo)
       self.gibHP = bhelpers.gibCalc(self.hp, self.role.gibRatio, minion, elite, solo)
-      self.ac = bhelpers.defenseCalc(14, self.role.acModMin, acModMax, self.level)
+      self.ac = bhelpers.defenseCalc(14, self.role.acModMin, self.role.acModMax, self.level)
       self.fortitude = bhelpers.defenseCalc(12, self.role.fortModMin, self.role.fortModMax, self.level)
       self.reflex = bhelpers.defenseCalc(12,self.role.refModMin, self.role.refModMax, self.level) 
       self.will = bhelpers.defenseCalc(12,self.role.willModMin, self.role.willModMax, self.level)     
       self.acAtkBase = random.randint(-1, 1) + level + 5
       self.nacAtkBase = random.randint(-1, 1) + level + 3
       self.eDC = 7 + round(level * .53)
-      self.mDC = 12 + round(level * 53) + round(level/10)
+      self.mDC = 12 + round(level * .53) + round(level/10)
       self.hDC = 17 + round(level *.64) + round(level/5)
       self.save()
       
@@ -113,8 +110,8 @@ class Monster(models.Model):
          attack._rebalance()
 
 class Usage(Definition):
-   limitedUsage = models.CharField(max_length=2,choices=choices.USAGE)
-
+   limitedUsage = models.BooleanField("Limited")
+ 
 class Ability(models.Model):
    name = models.CharField(max_length=70, blank=True, null=True)
    monster = models.ForeignKey(Monster)
@@ -124,11 +121,15 @@ class Ability(models.Model):
    area = models.IntegerField()#0 for Single Target, 1 for Burst/Blast 1, etc. 
    bloodiedLimit = models.BooleanField("Only usable when bloodied?")
    isRanged = models.BooleanField("Considered a Ranged Attack?")
+   isPassive = models.BooleanField("A passive ability?")
    oaFlag = models.BooleanField("Provokes Opportunity Attack?")
    aura = models.BooleanField("Is an Aura?")
    effect = models.CharField(max_length=150,blank=True,null=True)
    aftereffect = models.CharField(max_length=150,blank=True,null=True)
    
+   def __unicode__(self):
+      return "%s (%s %s power)" % (self.name, self.monster, self.usage)
+
    def atkRangeDisplay(self):
       str = "" 
 
@@ -150,6 +151,16 @@ class Ability(models.Model):
             str = "Close Blast %s" % self.area
          else:
             str = "Area Burst %s in %s" % (self.area, self.range)
+      if self.oaFlag:
+         str += " (Provokes OA)"
+
+      return str
+   
+   def atkUsageDisplay(self):
+      str = "Passive" if self.isPassive else "%s -- %s" % (self.usage, self.get_action_display())
+      
+      if self.bloodiedLimit:
+         str += " (Usable only when bloodied)"
       return str 
 
 class Attack(Ability):

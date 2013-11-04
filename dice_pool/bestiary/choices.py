@@ -40,6 +40,13 @@ CREATURE_ROLES = (
    if role == u'LU': hp = math.ceil(24+(3.5*level))
    if role == u'SK': hp = math.ceil(28+(5.5*level))
    if role == u'SO': hp = math.ceil(29+(5.5*level))
+   #GibRatio  
+   if role == u'AR': return health * .35
+   if role == u'BR': return health * .3
+   if role == u'CO': return health * .35
+   if role == u'LU': return health * .35
+   if role == u'SK': return health * .36
+   if role == u'SO': return health * .4
    #AC   
    if role == u'AR': return 14+random.randint(-1,2)+level
    if role == u'BR': return 14+random.randint(-2,1)+level
@@ -72,16 +79,6 @@ CREATURE_ROLES = (
    if role == u'SK': return 12+random.randint(-1,2)+level
    if role == u'SO': return 12+random.randint(0,2)+level
 
-   #GibRatio  
-   if minionFlag: return health
-   if soloFlag: return health * .43
-   if eliteFlag: return health * .41
-   if role == u'AR': return health * .35
-   if role == u'BR': return health * .3
-   if role == u'CO': return health * .35
-   if role == u'LU': return health * .35
-   if role == u'SK': return health * .36
-   if role == u'SO': return health * .4
- 
+    
 """
 

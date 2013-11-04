@@ -14,7 +14,7 @@ def hpCalc(level, role, minion, elite, solo):
     
    return hp
 
-def defCalc(defBase, modMin, modMax, level):
+def defenseCalc(defBase, modMin, modMax, level):
    random.seed()
    return defBase+random.randint(modMin, modMax)+level
    

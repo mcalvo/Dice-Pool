@@ -9,7 +9,6 @@ class MonsterAdmin(admin.ModelAdmin):
    search_fields = ['name']
 
 admin.site.register(bestiarymodels.Usage)
-admin.site.register(bestiarymodels.Faction)
 admin.site.register(bestiarymodels.MonsterRole)
 admin.site.register(bestiarymodels.Ability)
 admin.site.register(bestiarymodels.Attack)

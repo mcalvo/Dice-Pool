@@ -2,14 +2,13 @@
 
 {% block menu %}
 	<div class="span-24 menu">
-		<ul>
+		<ul class="menu">
 			{% block main_menu %}
-				<li><a href="{% url 'root' %}">Home</a></li>
-				<li><a href="{% url 'bestiary_mon_listing' %}">Bestiary</a></li>
+				<li><a href="{% url site_index %}">Home</a></li>
+				<li><a href="{% url bestiary_monsterListing %}">Bestiary</a></li>
 				<li>Encounter Generator</li>
-				<li>Campaign Editor</li>
 				<li>Dice Bag</li>
-				<li>Character Sheet Manager</li>
+            <li><a href="{% url admin:index %}">Admin</a></li>
 			{% endblock %}
 		</ul>
 	</div>

@@ -2,11 +2,16 @@ from django.conf.urls.defaults import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from bestiary.forms import AbilityForm, AttackForm
+
 admin.autodiscover()
 
 urlpatterns = patterns('bestiary.views',
-    url(r'^$', 							'mon_listing', 		name = "bestiary_mon_listing"),
-    url(r'^(?P<mon_id>\d+)/$', 			'mon_detail', 		name = "bestiary_mon_detail"),
-    url(r'^create/$', 					'create_mon',	 	name = "bestiary_create_mon"),
-    url(r'^(?P<mon_id>\d+)/power/$', 	'create_power', 	name = "bestiary_create_power"),
+   url(r'^$', 							                        'monsterListing',               		   name = "bestiary_monsterListing"),
+   url(r'^(?P<mon_id>\d+)/$', 			                  'monsterDetail', 		                  name = "bestiary_monsterDetail"),
+   url(r'^create/$', 					                     'editMonster',	 	                     name = "bestiary_createMonster"),
+   url(r'^(?P<mon_id>\d+)/ability/$',                    'editAbility', {'form': AbilityForm },	name = "bestiary_createAbility"),
+   url(r'^(?P<mon_id>\d+)/attack/$', 	                  'editAbility', {'form': AttackForm },	name = "bestiary_createAttack"),
+   url(r'^(?P<mon_id>\d+)/ability/(?P<ability_id>\d+)/$','editAbility', {'form': AbilityForm },	name = "bestiary_editAbility"),
+   url(r'^(?P<mon_id>\d+)/attack/(?P<attack_id>\d+)/$', 	'editAbility', {'form': AttackForm },	name = "bestiary_editAttack"),
 )

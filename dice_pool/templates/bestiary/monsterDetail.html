@@ -21,15 +21,16 @@
    <h2>Abilities</h2>
    {% for ability in mon.ability_set.all %}
       <h3><u>{{ ability.name }}</u></h3>
-		<b>Usage:</b> {{ ability.get_action_display }} -- {{ ability.usage }}{% if ability.bloodiedLimit %}(Usable only when bloodied){% endif %}
+		<b>Usage:</b> {{ ability.atkUsageDisplay }}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<b>Range:</b> {% ability.atkRangeDisplay %}{% if ability.oaFlag %}(Provokes OA){% endif %}
-		{% if attack.effect %}<b>Effect:</b> {{ attack.effect }} {% endif %}
-      {% if attack.aftereffect %}<b>Aftereffect:</b> {{ attack.aftereffect }} {% endif %}
+		<b>Range:</b> {{ ability.atkRangeDisplay }}
+		{% if ability.effect %}<br /><b>Effect:</b> {{ ability.effect }} {% endif %}
+      {% if ability.aftereffect %}<br /><b>Aftereffect:</b> {{ ability.aftereffect }} {% endif %}
 		<br />
 
    {% endfor %} 
-
+   <a href="{% url bestiary_createAbility mon_id=mon.id%}">Add ability</a>
+   
 	<h2>Attacks</h2>
 	
 	<p><FONT SIZE = 2><b>Base Attack Bonus vs. AC:</b></FONT> {{ mon.acAtkBase }}
@@ -41,7 +42,7 @@
 		<h3><u>{{ attack.name }}</u></h3>
 		<b>Usage:</b> {{ attack.get_action_display }} -- {{ attack.usage }}{% if attack.bloodiedLimit %}(Usable only when bloodied){% endif %}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<b>Range:</b> {% attack.atkRangeDisplay %}{% if attack.oaFlag %}(Provokes OA){% endif %}
+		<b>Range:</b> {{ attack.atkRangeDisplay }}{% if attack.oaFlag %}(Provokes OA){% endif %}
 		<b>Attack: +</b>{{ attack.attackBonus }} vs. {{ attack.get_targetDefense_display }} 
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<b>Damage:</b> {{ attack.damageLine }}{% if attack.onHit %} {{ attack.onHit }}. {% endif %}<br />
@@ -49,10 +50,11 @@
       {% if attack.aftereffect %}<b>Aftereffect:</b> {{ attack.aftereffect }} {% endif %}
 		<br />
 	{% endfor %}
+   <a href="{% url bestiary_createAttack mon_id=mon.id%}">Add attack</a>
 	<br />
 	<br /><br />
 	<b>Note:</b> If adding effects to the attacks, remove one die of damage per effect.
 	
-	<p><p><a href="{% url bestiary_mon_listing %}">Back to the Monster Listing</a>
-	<p><p><a href="{% url bestiary_create_mon %}">Add a new monster</a>
+	<p><p><a href="{% url bestiary_monsterListing %}">Back to the Monster Listing</a>
+	<p><p><a href="{% url bestiary_createMonster %}">Add a new monster</a>
 {% endblock %}
