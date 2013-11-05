@@ -12,10 +12,14 @@ def hpCalc(level, role, minion, elite, solo):
    if elite:
      hp = math.ceil((hp*1.10)+(level*1.5)+10)
     
-   return hp
+   return int(hp)
 
-def defenseCalc(defBase, modMin, modMax, level):
+def defenseCalc(defBase, modMin, modMax, level, elite, solo):
    random.seed()
+   if solo:
+      defBase += 2
+   if elite:
+      defBase += 2
    return defBase+random.randint(modMin, modMax)+level
    
 def gibCalc(hp, ratio, minion, elite, solo):
@@ -34,10 +38,13 @@ def toHit(monster, range, area, isRanged, targetDefense):
    if range > 1 and isRanged and not monster.role.heavyHitter:
       atkBonus = atkBonus + level/10
    
+   if area > 0:
+      atkBonus = atkBonus - 1 
+ 
    if monster.solo:
       atkBonus = atkBonus + 2
    
-   if eliteFlag:
+   if monster.elite:
       atkBonus = atkBonus + 1
 
    return atkBonus
@@ -55,7 +62,7 @@ def damageToDice(damage,minion, onHit):
     
 def whichDie(avgDmg):
    random.seed()
-   die = random.randint(2, 5)
+   die = random.randint(3, 5)
    die = die*2
    return  die
 

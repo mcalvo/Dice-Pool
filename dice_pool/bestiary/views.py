@@ -30,7 +30,7 @@ def editAbility(request,mon_id,form=None,attack_id=None, ability_id=None):
       monster = mcm.Monster.objects.get(id=mon_id)
    except mcm.Monster.DoesNotExist:
       messages.error(request, "Not a valid monster.")
-      return redirect(reverse('bestiary_mon_listing'))
+      return redirect(reverse('bestiary_monsterListing'))
    
    refObj=None 
    
@@ -50,4 +50,5 @@ def editAbility(request,mon_id,form=None,attack_id=None, ability_id=None):
    if request.POST and reqForm.is_valid():
       reqForm.save()
       return redirect(reverse('bestiary_monsterDetail', args=[mon_id,]))
+
    return render(request, 'bestiary/editAbility.html', {'form': reqForm, 'c': monster})

@@ -44,8 +44,6 @@ class MonsterRole(Definition):
    heavyHitter = models.BooleanField("Sacrifice accuracy for damage?") #For brutes, mostly.
    
    def __unicode__(self):
-      if self.heavyHitter:
-         return "Brute %s" % self.name
       return "%s" % self.name
       
    def save(self, *args, **kwargs):
@@ -93,12 +91,12 @@ class Monster(models.Model):
       self.elite = elite
       self.solo = solo
       self.initiative = level * .60
-      self.hp = bhelpers.hpCalc(level, role, minion, elite, solo)
+      self.hp = bhelpers.hpCalc(level, role.hpRatio, minion, elite, solo)
       self.gibHP = bhelpers.gibCalc(self.hp, self.role.gibRatio, minion, elite, solo)
-      self.ac = bhelpers.defenseCalc(14, self.role.acModMin, self.role.acModMax, self.level)
-      self.fortitude = bhelpers.defenseCalc(12, self.role.fortModMin, self.role.fortModMax, self.level)
-      self.reflex = bhelpers.defenseCalc(12,self.role.refModMin, self.role.refModMax, self.level) 
-      self.will = bhelpers.defenseCalc(12,self.role.willModMin, self.role.willModMax, self.level)     
+      self.ac = bhelpers.defenseCalc(14, self.role.acModMin, self.role.acModMax, self.level, self.elite, self.solo)
+      self.fortitude = bhelpers.defenseCalc(12, self.role.fortModMin, self.role.fortModMax, self.level, self.elite, self.solo)
+      self.reflex = bhelpers.defenseCalc(12,self.role.refModMin, self.role.refModMax, self.level, self.elite, self.solo) 
+      self.will = bhelpers.defenseCalc(12,self.role.willModMin, self.role.willModMax, self.level, self.elite, self.solo)     
       self.acAtkBase = random.randint(-1, 1) + level + 5
       self.nacAtkBase = random.randint(-1, 1) + level + 3
       self.eDC = 7 + round(level * .53)
@@ -112,7 +110,7 @@ class Monster(models.Model):
 class Usage(Definition):
    limitedUsage = models.BooleanField("Limited")
  
-class Ability(models.Model):
+class PowerBase(models.Model):
    name = models.CharField(max_length=70, blank=True, null=True)
    monster = models.ForeignKey(Monster)
    usage = models.ForeignKey(Usage)
@@ -163,7 +161,13 @@ class Ability(models.Model):
          str += " (Usable only when bloodied)"
       return str 
 
-class Attack(Ability):
+   class Meta:
+      abstract = True
+
+class Ability(PowerBase):
+   pass
+
+class Attack(PowerBase):
    attackBonus = models.IntegerField()
    targetDefense = models.CharField(max_length=1,choices=choices.DEFENSES,verbose_name='Target defense') 
    averageDamage = models.IntegerField()
@@ -175,9 +179,9 @@ class Attack(Ability):
       return "%s (%s %s)" % (self.name, self.usage, self.action)
    
    def _rebalance(self):
-         self.attackBonus = bhelpers.toHit(self.monster,self.range,self.targetDef)
+         self.attackBonus = bhelpers.toHit(self.monster,self.range, self.area, self.isRanged, self.targetDefense)
          hasEffect = True if self.effect or self.aftereffect or self.onHit else False  
-         self.averageDamage = bhelpers.averageDamage(self.monster.level,self.monster.minion,self.monster.role.heavyHitter,self.range,self.area,self.limited,self.multiStrike,hasEffect)
+         self.averageDamage = bhelpers.averageDamage(self.monster.level,self.monster.minion,self.monster.role.heavyHitter,self.range,self.area,self.usage.limitedUsage,self.multiStrike,hasEffect)
          self.damageLine = bhelpers.damageToDice(self.averageDamage,self.monster.minion,self.onHit)
          self.save()
     

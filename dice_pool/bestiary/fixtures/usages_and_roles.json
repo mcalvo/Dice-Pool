@@ -1,0 +1,207 @@
+[
+   {
+      "model": "bestiary.MonsterRole",
+      "pk": 1,
+      "fields": {
+         "name": "Artillery",
+         "active": "True",
+         "hpBase": 24,
+         "hpRatio": "3.5",
+         "gibRatio": "0.35",
+         "acModMin": -1,
+         "acModMax": 2,
+         "fortModMin": -3,
+         "fortModMax": 1,
+         "refModMin": 1,
+         "refModMax": 3,
+         "willModMin": -1,
+         "willModMax": 2,
+         "heavyHitter": "False"
+      }
+   },
+   {
+   "model": "bestiary.MonsterRole",
+      "pk": 2,
+      "fields": {
+         "name": "Bruiser",
+         "active": "True",
+         "hpBase": 32,
+         "hpRatio": "6.5",
+         "gibRatio": "0.3",
+         "acModMin": -2,
+         "acModMax": 1,
+         "fortModMin": 1,
+         "fortModMax": 3,
+         "refModMin": -1,
+         "refModMax": 2,
+         "willModMin": -1,
+         "willModMax": 2,
+         "heavyHitter": "False"
+      }
+   },
+   {
+   "model": "bestiary.MonsterRole",
+      "pk": 3,
+      "fields": {
+         "name": "Controller",
+         "active": "True",
+         "hpBase": 28,
+         "hpRatio": "5.5",
+         "gibRatio": "0.35",
+         "acModMin": -1,
+         "acModMax": 2,
+         "fortModMin": -1,
+         "fortModMax": 2,
+         "refModMin": -1,
+         "refModMax": 2,
+         "willModMin": 1,
+         "willModMax": 3,
+         "heavyHitter": "False"
+      }
+   },
+   {
+      "model": "bestiary.MonsterRole",
+      "pk": 4,
+      "fields": {
+         "name": "Lurker",
+         "active": "True",
+         "hpBase": 24,
+         "hpRatio": "3.5",
+         "gibRatio": "0.35",
+         "acModMin": -3,
+         "acModMax": 1,
+         "fortModMin": -1,
+         "fortModMax": 2,
+         "refModMin": -1,
+         "refModMax": 2,
+         "willModMin": -1,
+         "willModMax": 2,
+         "heavyHitter": "False"
+      }
+   },
+   {
+   "model": "bestiary.MonsterRole",
+      "pk": 5,
+      "fields": {
+         "name": "Skirmisher",
+         "active": "True",
+         "hpBase": 28,
+         "hpRatio": "5.5",
+         "gibRatio": "0.36",
+         "acModMin": -1,
+         "acModMax": 2,
+         "fortModMin": -1,
+         "fortModMax": 2,
+         "refModMin": 1,
+         "refModMax": 3,
+         "willModMin": -1,
+         "willModMax": 2,
+         "heavyHitter": "False"
+      }
+   },
+   {
+   "model": "bestiary.MonsterRole",
+      "pk": 6,
+      "fields": {
+         "name": "Soldier",
+         "active": "True",
+         "hpBase": 29,
+         "hpRatio": "5.5",
+         "gibRatio": "0.4",
+         "acModMin": 0,
+         "acModMax": 3,
+         "fortModMin": 0,
+         "fortModMax": 2,
+         "refModMin": 0,
+         "refModMax": 2,
+         "willModMin": 0,
+         "willModMax": 2,
+         "heavyHitter": "False"
+      }
+   },
+   {
+   "model": "bestiary.MonsterRole",
+      "pk": 7,
+      "fields": {
+         "name": "Heavy Artillery",
+         "active": "True",
+         "hpBase": 27,
+         "hpRatio": "4.5",
+         "gibRatio": "0.4",
+         "acModMin": -2,
+         "acModMax": 1,
+         "fortModMin": -4,
+         "fortModMax": 0,
+         "refModMin": 0,
+         "refModMax": 2,
+         "willModMin": -2,
+         "willModMax": 1,
+         "heavyHitter": "True"
+      }
+   },
+   {
+   "model": "bestiary.MonsterRole",
+      "pk": 8,
+      "fields": {
+         "name": "Brute",
+         "active": "True",
+         "hpBase": 35,
+         "hpRatio": "7.5",
+         "gibRatio": "0.35",
+         "acModMin": -3,
+         "acModMax": 0,
+         "fortModMin": 0,
+         "fortModMax": 2,
+         "refModMin": -1,
+         "refModMax": 1,
+         "willModMin": -2,
+         "willModMax": 1,
+         "heavyHitter": "True"
+      }
+   },
+   {
+      "model": "bestiary.Usage",
+      "pk": 1,
+      "fields": {
+         "name": "At-Will",
+         "active": "True",
+         "limitedUsage": "False"  
+      }
+   },
+   {
+      "model": "bestiary.Usage",
+      "pk": 2,
+      "fields": {
+         "name": "Encounter",
+         "active": "True",
+         "limitedUsage": "True"  
+      }
+   },
+   {
+      "model": "bestiary.Usage",
+      "pk": 3,
+      "fields": {
+         "name": "Recharge 456",
+         "active": "True",
+         "limitedUsage": "False"  
+      }
+   },
+   {
+      "model": "bestiary.Usage",
+      "pk": 4,
+      "fields": {
+         "name": "Recharge 56",
+         "active": "True",
+         "limitedUsage": "True"  
+      }
+   },
+   {
+      "model": "bestiary.Usage",
+      "pk": 5,
+      "fields": {
+         "name": "Recharge 6",
+         "active": "True",
+         "limitedUsage": "True"  
+      }
+   }
+]
