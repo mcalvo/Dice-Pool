@@ -76,8 +76,13 @@
    }
    
    function damagePop(damageArray, flatVal){
-      total = damageArray.reduce(function(a, b){ return a + b; }) + flatVal;
-      var printString = "[" + damageArray + "] " + flatVal + " = " + total;
+      if(damageArray instanceof Array){
+         total = damageArray.reduce(function(a, b){ return a + b; }) + flatVal;
+         var printString = "[" + damageArray + "] " + flatVal + " = " + total;
+         }
+      else{
+         var printString = damageArray;
+         }
       alert(printString);
    }
 </script>
