@@ -4,3 +4,8 @@
    padding: 5px;
    display: inline;
 }
+
+a.rollLink {
+   font-weight: bold;
+   color: #6666FF;
+}

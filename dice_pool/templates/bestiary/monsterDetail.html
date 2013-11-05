@@ -1,4 +1,5 @@
 {% extends "panel.html" %}
+{% load diceTags %}
 {% block head %}
 {{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}js/dice.js"></script>
@@ -49,9 +50,9 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<b>Range:</b> {{ attack.atkRangeDisplay }}{% if attack.oaFlag %}(Provokes OA){% endif %}
       <br />
-		<b>Attack: +</b>{{ attack.attackBonus }} vs. {{ attack.get_targetDefense_display }} 
+		<b>Attack:</b><a class="rollLink" onclick="attackPop({{attack.attackBonus}}, '{{ attack.get_targetDefense_display }}')"> +{{ attack.attackBonus }} vs. {{ attack.get_targetDefense_display }}</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <b>Hit:</b> {{ attack.damageLine }} damage {% if attack.onHit %}and {{ attack.onHit }}. {% endif %}<br />
+      <b>Hit:</b> <a class="rollLink" onclick="damagePop({% damageLineRollCall attack.damageLine %})">{{ attack.damageLine }}</a> damage {% if attack.onHit %}and {{ attack.onHit }}. {% endif %}<br />
 		{% if attack.effect %}<b>Effect:</b> {{ attack.effect }} {% endif %}
       {% if attack.aftereffect %}<b>Aftereffect:</b> {{ attack.aftereffect }} {% endif %}
 		<br />
@@ -63,4 +64,21 @@
 	
 	<p><p><a href="{% url bestiary_monsterListing %}">Back to the Monster Listing</a>
 	<p><p><a href="{% url bestiary_createMonster %}">Add a new monster</a>
+
+<script type="text/javascript">
+   var dice = new Dice();
+   
+   function attackPop(attackBonus, defense){
+      var atkRoll = dice.d20();
+      atkTotal = atkRoll + attackBonus;
+      attackString = "Attack: " + atkRoll + " + " + attackBonus + " = " + atkTotal + " vs. " + defense;
+      alert(attackString);
+   }
+   
+   function damagePop(damageArray, flatVal){
+      total = damageArray.reduce(function(a, b){ return a + b; }) + flatVal;
+      var printString = "[" + damageArray + "] " + flatVal + " = " + total;
+      alert(printString);
+   }
+</script>
 {% endblock %}
