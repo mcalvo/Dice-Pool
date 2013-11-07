@@ -84,31 +84,27 @@ class Monster(models.Model):
    def __unicode__(self):
       return "Lvl. %s %s" % (self.level, self.name)
    
-   def __rebalance(self, level, role, minion, elite, solo):
-      self.level = level
-      self.role = role
-      self.minion = minion
-      self.elite = elite
-      self.solo = solo
-      self.initiative = level * .60
-      self.hp = bhelpers.hpCalc(level, role.hpRatio, minion, elite, solo)
-      self.gibHP = bhelpers.gibCalc(self.hp, self.role.gibRatio, minion, elite, solo)
+   def __rebalance__(self):
+      self.initiative = self.level * .60
+      self.hp = bhelpers.hpCalc(self.level, self.role, self.minion, self.elite, self.solo)
+      self.gibHP = bhelpers.gibCalc(self.hp, self.role.gibRatio, self.minion, self.elite, self.solo)
       self.ac = bhelpers.defenseCalc(14, self.role.acModMin, self.role.acModMax, self.level, self.elite, self.solo)
       self.fortitude = bhelpers.defenseCalc(12, self.role.fortModMin, self.role.fortModMax, self.level, self.elite, self.solo)
       self.reflex = bhelpers.defenseCalc(12,self.role.refModMin, self.role.refModMax, self.level, self.elite, self.solo) 
       self.will = bhelpers.defenseCalc(12,self.role.willModMin, self.role.willModMax, self.level, self.elite, self.solo)     
-      self.acAtkBase = random.randint(-1, 1) + level + 5
-      self.nacAtkBase = random.randint(-1, 1) + level + 3
-      self.eDC = 7 + round(level * .53)
-      self.mDC = 12 + round(level * .53) + round(level/10)
-      self.hDC = 17 + round(level *.64) + round(level/5)
+      self.acAtkBase = random.randint(-1, 1) + self.level + 5
+      self.nacAtkBase = random.randint(-1, 1) + self.level + 3
+      self.eDC = 7 + round(self.level * .53)
+      self.mDC = 12 + round(self.level * .53) + round(self.level/10)
+      self.hDC = 17 + round(self.level *.64) + round(self.level/5)
       self.save()
       
       for attack in self.attack_set.all():
-         attack._rebalance()
+         attack.__rebalance__()
 
 class Usage(Definition):
    limitedUsage = models.BooleanField("Limited")
+   triggeredAction = models.BooleanField("Triggered?")
  
 class PowerBase(models.Model):
    name = models.CharField(max_length=70, blank=True, null=True)
@@ -124,6 +120,8 @@ class PowerBase(models.Model):
    aura = models.BooleanField("Is an Aura?")
    effect = models.CharField(max_length=150,blank=True,null=True)
    aftereffect = models.CharField(max_length=150,blank=True,null=True)
+   trigger = models.CharField(max_length=150,blank=True,null=True)
+ 
    
    def __unicode__(self):
       return "%s (%s %s power)" % (self.name, self.monster, self.usage)
@@ -178,7 +176,7 @@ class Attack(PowerBase):
    def __unicode__(self):
       return "%s (%s %s)" % (self.name, self.usage, self.action)
    
-   def _rebalance(self):
+   def __rebalance__(self):
          self.attackBonus = bhelpers.toHit(self.monster,self.range, self.area, self.isRanged, self.targetDefense)
          hasEffect = True if self.effect or self.aftereffect or self.onHit else False  
          self.averageDamage = bhelpers.averageDamage(self.monster.level,self.monster.minion,self.monster.role.heavyHitter,self.range,self.area,self.usage.limitedUsage,self.multiStrike,hasEffect)

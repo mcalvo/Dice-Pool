@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/dice.js"></script>
 {% endblock %}
 {% block body %}
-	<h1>{{ mon.name }}</h2>
+	<h1>{{ mon.name }}<a href="{% url bestiary_editMonster mon.id %}">[EDIT]</a><a href="{% url bestiary_rebalanceMonster mon.id %}">[REBALANCE]</a></h2>
 	<p><FONT SIZE = 3><b>Level:</b></FONT> {{mon.level}}
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<FONT SIZE = 3><b>Role:</b></FONT> {% if mon.elite %} Elite {% endif %} {% if mon.solo %} Solo {% endif %} {{ mon.role }} {% if mon.minion %} Minion {% endif %}
@@ -23,21 +23,21 @@
 		<li>Master (Hard DC): {{ mon.hDC }}</li>
 	</ul>
 	
-   <h2>Abilities</h2>
+   <h2>Abilities<a href="{% url bestiary_createAbility mon.id%}">[+]</a></h2>
    {% for ability in mon.ability_set.all %}
-      <h3><u>{{ ability.name }}</u></h3>
+      <h3><u>{{ ability.name }}</u> <a href="{% url bestiary_editAbility mon.id ability.id %}">[EDIT]</a></h3>
 		<b>Usage:</b> {{ ability.atkUsageDisplay }}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<b>Range:</b> {{ ability.atkRangeDisplay }}
+      {% if ability.trigger %}<br /><b>Trigger:</b> {{ ability.trigger }}{% endif %}
 		{% if ability.effect %}<br /><b>Effect:</b> {{ ability.effect }} {% endif %}
       {% if ability.aftereffect %}<br /><b>Aftereffect:</b> {{ ability.aftereffect }} {% endif %}
 		<br />
 
    {% endfor %}
    <br /> 
-   <a href="{% url bestiary_createAbility mon_id=mon.id%}">Add ability</a>
    
-	<h2>Attacks</h2>
+	<h2>Attacks<a href="{% url bestiary_createAttack mon.id%}">[+]</a></h2>
 	
 	<p><FONT SIZE = 2><b>Base Attack Bonus vs. AC:</b></FONT> {{ mon.acAtkBase }}
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -45,11 +45,12 @@
 	
 	<br />
 	{% for attack in mon.attack_set.all %}
-		<h3><u>{{ attack.name }}</u></h3>
+		<h3><u>{{ attack.name }}</u> <a href="{% url bestiary_editAttack mon.id attack.id %}">[EDIT]</a><a href="{% url bestiary_rebalanceAttack mon.id attack.id %}">[REBALANCE]</a></h3>
 		<b>Usage:</b> {{ attack.get_action_display }} -- {{ attack.usage }}{% if attack.bloodiedLimit %}(Usable only when bloodied){% endif %}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<b>Range:</b> {{ attack.atkRangeDisplay }}{% if attack.oaFlag %}(Provokes OA){% endif %}
       <br />
+      {% if attack.trigger %}<b>Trigger</b>: {{ attack.trigger }}<br />{% endif %}
 		<b>Attack:</b><a class="rollLink" onclick="attackPop({{attack.attackBonus}}, '{{ attack.get_targetDefense_display }}')"> +{{ attack.attackBonus }} vs. {{ attack.get_targetDefense_display }}</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <b>Hit:</b> <a class="rollLink" onclick="damagePop({% damageLineRollCall attack.damageLine %})">{{ attack.damageLine }}</a> damage {% if attack.onHit %}and {{ attack.onHit }}. {% endif %}<br />
@@ -57,7 +58,6 @@
       {% if attack.aftereffect %}<b>Aftereffect:</b> {{ attack.aftereffect }} {% endif %}
 		<br />
 	{% endfor %}
-   <a href="{% url bestiary_createAttack mon_id=mon.id%}">Add attack</a>
 	<br />
 	<br /><br />
 	<b>Note:</b> If adding effects to the attacks, remove one die of damage per effect.

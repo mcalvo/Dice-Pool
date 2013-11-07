@@ -7,35 +7,29 @@ from bestiary import helpers as bhelpers
 import math, random
 
 class MonsterForm(forms.ModelForm):
-   level = forms.IntegerField(label='Level', min_value=1, max_value=50)
-
    def save(self, *args, **kwargs):
       record = super(MonsterForm, self).save(commit=False, *args, **kwargs)
-      random.seed()
-      record.initiative = record.level*.60
-      record.hp = bhelpers.hpCalc(record.level, record.role, record.minion, record.elite, record.solo)
-      record.gibHP = bhelpers.gibCalc(record.hp, record.role.gibRatio, record.minion, record.elite, record.solo)
-      record.ac = bhelpers.defenseCalc(14, record.role.acModMin, record.role.acModMax, record.level, record.elite, record.solo)
-      record.fortitude = bhelpers.defenseCalc(12, record.role.fortModMin, record.role.fortModMax, record.level, record.elite, record.solo)
-      record.reflex = bhelpers.defenseCalc(12,record.role.refModMin, record.role.refModMax, record.level, record.elite, record.solo) 
-      record.will = bhelpers.defenseCalc(12,record.role.willModMin, record.role.willModMax, record.level, record.elite, record.solo)
-      record.acAtkBase = random.randint(-1, 1) + record.level + 5
-      record.nacAtkBase = random.randint(-1, 1) + record.level + 3
-      record.eDC = 7 + round(record.level * .53)
-      record.mDC = 12 + round(record.level * .53) + round(record.level/10)
-      record.hDC = 17 + round(record.level *.64) + round(record.level/5)
-      record.save(*args, **kwargs)
+      if not self.instance.id:   
+         random.seed()
+         record.initiative = record.level*.60
+         record.hp = bhelpers.hpCalc(record.level, record.role, record.minion, record.elite, record.solo)
+         record.gibHP = bhelpers.gibCalc(record.hp, record.role.gibRatio, record.minion, record.elite, record.solo)
+         record.ac = bhelpers.defenseCalc(14, record.role.acModMin, record.role.acModMax, record.level, record.elite, record.solo)
+         record.fortitude = bhelpers.defenseCalc(12, record.role.fortModMin, record.role.fortModMax, record.level, record.elite, record.solo)
+         record.reflex = bhelpers.defenseCalc(12,record.role.refModMin, record.role.refModMax, record.level, record.elite, record.solo) 
+         record.will = bhelpers.defenseCalc(12,record.role.willModMin, record.role.willModMax, record.level, record.elite, record.solo)
+         record.acAtkBase = random.randint(-1, 1) + record.level + 5
+         record.nacAtkBase = random.randint(-1, 1) + record.level + 3
+         record.eDC = 7 + round(record.level * .53)
+         record.mDC = 12 + round(record.level * .53) + round(record.level/10)
+         record.hDC = 17 + round(record.level *.64) + round(record.level/5)
+      record.save()
    
    class Meta:
       model = mcm.Monster
       fields = ('name', 'level', 'role', 'minion', 'elite', 'solo', 'speed')
-      #exclude = ('ac', 'fortitude', 'reflex', 'will', 'initiative', 'hp', 'suddenDmg', 'acAtkBase', 'nacAtkBase', 'eDC', 'mDC', 'hDC',)
 
 class AbilityForm(forms.ModelForm):
-   def __init__(self, monster, *args, **kwargs):
-      super(AbilityForm, self).__init__(*args, **kwargs)
-      self.monster = monster
-
    def clean(self):
       range = self.cleaned_data.get('range')
       area = self.cleaned_data.get('area')
@@ -60,10 +54,6 @@ class AbilityForm(forms.ModelForm):
       exclude = ['monster']
 
 class AttackForm(forms.ModelForm):
-   def __init__(self, monster, *args, **kwargs):
-      super(AttackForm, self).__init__(*args, **kwargs)
-      self.monster = monster
-
    def clean(self):
       range = self.cleaned_data.get('range')
       area = self.cleaned_data.get('area')
