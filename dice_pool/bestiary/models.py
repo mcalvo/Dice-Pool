@@ -177,9 +177,9 @@ class Attack(PowerBase):
       return "%s (%s %s)" % (self.name, self.usage, self.action)
    
    def __rebalance__(self):
-         self.attackBonus = bhelpers.toHit(self.monster,self.range, self.area, self.isRanged, self.targetDefense)
-         hasEffect = True if self.effect or self.aftereffect or self.onHit else False  
-         self.averageDamage = bhelpers.averageDamage(self.monster.level,self.monster.minion,self.monster.role.heavyHitter,self.range,self.area,self.usage.limitedUsage,self.multiStrike,hasEffect)
-         self.damageLine = bhelpers.damageToDice(self.averageDamage,self.monster.minion,self.onHit)
-         self.save()
+      self.attackBonus = bhelpers.toHit(self.monster,self.range, self.area, self.isRanged, self.targetDefense)
+      hasEffect = True if self.effect or self.aftereffect or self.onHit else False  
+      self.averageDamage = bhelpers.averageDamage(self.monster, self.monster.role.heavyHitter, self.range,self.area,self.usage.limitedUsage, self.bloodiedLimit, self.multiStrike,hasEffect)
+      self.damageLine = bhelpers.damageToDice(self.averageDamage,self.monster.minion,self.onHit)
+      self.save()
     

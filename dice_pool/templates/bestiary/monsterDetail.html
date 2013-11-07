@@ -4,8 +4,14 @@
 {{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}js/dice.js"></script>
 {% endblock %}
+{% block submenu %}
+<li><a href="{% url bestiary_editMonster mon.id %}"><s>Edit Monster</s></a></li>
+<li><a href="{% url bestiary_rebalanceMonster mon.id %}">Rebalance All</a></li>
+<li><a href="{% url bestiary_createAbility mon.id%}">Add Ability</a></li>
+<li><a href="{% url bestiary_createAttack mon.id%}">Add Attack</a></li>
+{% endblock %}
 {% block body %}
-	<h1>{{ mon.name }}<a href="{% url bestiary_editMonster mon.id %}">[EDIT]</a><a href="{% url bestiary_rebalanceMonster mon.id %}">[REBALANCE]</a></h2>
+	<h1>{{ mon.name }}</h1>
 	<p><FONT SIZE = 3><b>Level:</b></FONT> {{mon.level}}
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<FONT SIZE = 3><b>Role:</b></FONT> {% if mon.elite %} Elite {% endif %} {% if mon.solo %} Solo {% endif %} {{ mon.role }} {% if mon.minion %} Minion {% endif %}
@@ -23,9 +29,9 @@
 		<li>Master (Hard DC): {{ mon.hDC }}</li>
 	</ul>
 	
-   <h2>Abilities<a href="{% url bestiary_createAbility mon.id%}">[+]</a></h2>
+   <h2>Abilities</h2>
    {% for ability in mon.ability_set.all %}
-      <h3><u>{{ ability.name }}</u> <a href="{% url bestiary_editAbility mon.id ability.id %}">[EDIT]</a></h3>
+      <h3><u>{{ ability.name }}</u><FONT SIZE=2> <a href="{% url bestiary_editAbility mon.id ability.id %}">[EDIT]</a></FONT></h3>
 		<b>Usage:</b> {{ ability.atkUsageDisplay }}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<b>Range:</b> {{ ability.atkRangeDisplay }}
@@ -33,37 +39,51 @@
 		{% if ability.effect %}<br /><b>Effect:</b> {{ ability.effect }} {% endif %}
       {% if ability.aftereffect %}<br /><b>Aftereffect:</b> {{ ability.aftereffect }} {% endif %}
 		<br />
-
+   -----
    {% endfor %}
    <br /> 
    
-	<h2>Attacks<a href="{% url bestiary_createAttack mon.id%}">[+]</a></h2>
-	
-	<p><FONT SIZE = 2><b>Base Attack Bonus vs. AC:</b></FONT> {{ mon.acAtkBase }}
+	<h2>Attacks</h2>
+	<FONT SIZE = 2><b>Base Attack Bonus vs. AC:</b></FONT> {{ mon.acAtkBase }}
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<FONT SIZE = 2><b>Base Attack Bonus vs. NAD:</b></FONT> {{ mon.nacAtkBase }}
-	
-	<br />
+	<FONT SIZE = 2><b>Base Attack Bonus vs. NAD:</b></FONT> {{ mon.nacAtkBase }}	
 	{% for attack in mon.attack_set.all %}
-		<h3><u>{{ attack.name }}</u> <a href="{% url bestiary_editAttack mon.id attack.id %}">[EDIT]</a><a href="{% url bestiary_rebalanceAttack mon.id attack.id %}">[REBALANCE]</a></h3>
-		<b>Usage:</b> {{ attack.get_action_display }} -- {{ attack.usage }}{% if attack.bloodiedLimit %}(Usable only when bloodied){% endif %}
+		<h3>
+         <u>
+         <a onclick="rollPop({{attack.attackBonus }},'{{ attack.get_targetDefense_display }}',{% damageLineRollCall attack.damageLine %})">
+               {{ attack.name }}
+         </a></u>&nbsp;
+         <FONT SIZE=2>
+            <a href="{% url bestiary_editAttack mon.id attack.id %}">[EDIT]</a>&nbsp;
+            <a href="{% url bestiary_rebalanceAttack mon.id attack.id %}">[REBALANCE]</a>
+         </FONT>
+      </h3>
+      <b>Usage:</b> {{ attack.get_action_display }} -- {{ attack.usage }}{% if attack.bloodiedLimit %}(Usable only when bloodied){% endif %}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<b>Range:</b> {{ attack.atkRangeDisplay }}{% if attack.oaFlag %}(Provokes OA){% endif %}
       <br />
       {% if attack.trigger %}<b>Trigger</b>: {{ attack.trigger }}<br />{% endif %}
-		<b>Attack:</b><a class="rollLink" onclick="attackPop({{attack.attackBonus}}, '{{ attack.get_targetDefense_display }}')"> +{{ attack.attackBonus }} vs. {{ attack.get_targetDefense_display }}</a>
+		<b>Attack:</b><a class="rollLink" onclick="alert(attackPop({{attack.attackBonus}}, '{{ attack.get_targetDefense_display }}'))"> +{{ attack.attackBonus }} vs. {{ attack.get_targetDefense_display }}</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <b>Hit:</b> <a class="rollLink" onclick="damagePop({% damageLineRollCall attack.damageLine %})">{{ attack.damageLine }}</a> damage {% if attack.onHit %}and {{ attack.onHit }}. {% endif %}<br />
+      <b>Hit:</b>
+      {% if not mon.minion %}
+         <a class="rollLink" onclick="alert(damagePop({% damageLineRollCall attack.damageLine %}))">{{ attack.damageLine }}</a> ({{ attack.averageDamage }}) 
+      {% else %} 
+         {{attack.damageLine }} 
+      {% endif %} 
+      damage {% if attack.onHit %}and {{ attack.onHit }}. {% endif %}<br />
 		{% if attack.effect %}<b>Effect:</b> {{ attack.effect }} {% endif %}
       {% if attack.aftereffect %}<b>Aftereffect:</b> {{ attack.aftereffect }} {% endif %}
+      <br />
 		<br />
-	{% endfor %}
+	   -----
+   {% endfor %}
 	<br />
 	<br /><br />
 	<b>Note:</b> If adding effects to the attacks, remove one die of damage per effect.
 	
-	<p><p><a href="{% url bestiary_monsterListing %}">Back to the Monster Listing</a>
-	<p><p><a href="{% url bestiary_createMonster %}">Add a new monster</a>
+	<a href="{% url bestiary_monsterListing %}">Back to the Monster Listing</a>
+	<a href="{% url bestiary_createMonster %}">Add a new monster</a>
 
 <script type="text/javascript">
    var dice = new Dice();
@@ -72,18 +92,24 @@
       var atkRoll = dice.d20();
       atkTotal = atkRoll + attackBonus;
       attackString = "Attack: " + atkRoll + " + " + attackBonus + " = " + atkTotal + " vs. " + defense;
-      alert(attackString);
+      return attackString;
    }
    
    function damagePop(damageArray, flatVal){
       if(damageArray instanceof Array){
          total = damageArray.reduce(function(a, b){ return a + b; }) + flatVal;
-         var printString = "[" + damageArray + "] " + flatVal + " = " + total;
+         var printString = "[" + damageArray + "] + " + flatVal + " = " + total;
          }
       else{
          var printString = damageArray;
          }
-      alert(printString);
+      return "Damage: " + printString;
+   }
+
+   function rollPop(attackBonus, defense, damageArray, flatVal){
+      var atk = attackPop(attackBonus, defense);
+      var dmg = damagePop(damageArray, flatVal);
+      alert(atk + "\n" + dmg)
    }
 </script>
 {% endblock %}

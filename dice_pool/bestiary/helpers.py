@@ -36,7 +36,7 @@ def toHit(monster, range, area, isRanged, targetDefense):
    atkBonus = monster.acAtkBase if targetDefense == 'A' else monster.nacAtkBase
 
    if range > 1 and isRanged and not monster.role.heavyHitter:
-      atkBonus = atkBonus + level/10
+      atkBonus = atkBonus + monster.level/10
    
    if area > 0:
       atkBonus = atkBonus - 1 
@@ -66,32 +66,41 @@ def whichDie(avgDmg):
    die = die*2
    return  die
 
-def averageDamage(level,minion,heavyHitter,range,area,limited,multiStrike,hasEffect):
+def averageDamage(monster,heavyHitter,range,area,limitedUsage,bloodiedLimit,multiStrike,hasEffect):
    dmg = 0
 
-   if minion:
-      dmg = 3 * (level/4) + 3 if heavyHitter else (level/2) + 2
+   if monster.minion:
+      dmg = 3 * (monster.level/4) + 3 if heavyHitter else (monster.level/2) + 2
     
    #Brute damage
    else:
       if heavyHitter:
-         if limited:
+         if limitedUsage:
             #limited single target attack vs limited area attack
-            dmg = 8+round((level+8)*.9678) if area == 0 else 8+round((level+4)*.9678)
+            dmg = 8+round((monster.level+8)*.9678) if area == 0 else 8+round((monster.level+4)*.9678)
          else:
             #At-will single target attack vs at-will area attack 
-            dmg = 8+round((level+3)*.9678) if area == 0 else 8+round((level-1)*.9678)
+            dmg = 8+round((mosnter.level+3)*.9678) if area == 0 else 8+round((monster.level-1)*.9678)
           
       #Non-brute damage
       else:
-         if limited:
+         if limitedUsage:
             #limited single target attack vs limited AoE attack
-            dmg = 8+round((level+5)*.9678) if area == 0 else 8+round(level*.9678)
+            dmg = 8+round((monster.level+5)*.9678) if area == 0 else 8+round(monster.level*.9678)
 
          else:
             #At-will single target attack vs At-will AoE attack
-            dmg = 8+round(level*.9678) if area == 0 else 8+round((level-5)*.9678)
-  
+            dmg = 8+round(monster.level*.9678) if area == 0 else 8+round((monster.level-5)*.9678)
+   
+   if bloodiedLimit:
+      dmg = round(1.5*dmg)
+   
+   if monster.elite:
+      dmg = round(1.2*dmg)
+
+   if monster.solo:
+      dmg = round(1.4*dmg)
+
    if multiStrike:
       dmg = round(.65*dmg)
    

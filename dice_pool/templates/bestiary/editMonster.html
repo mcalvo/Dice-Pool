@@ -6,9 +6,54 @@
 	{% if error_message %} <p><strong> {{ error_message }}</strong></p>{% endif %}
 	<form action="." method="post">
 		{% csrf_token %}	
-		{{form.as_p}}
-		
-		<input type="submit" value="Create" />
+		<div>
+         <span>
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+         </span>
+      </div>
+      <br />
+      <div>
+         <span>
+            {{ form.level.label_tag }}
+            {{ form.level }}
+            {{ form.level.errors }}
+         </span>
+         <span>
+            {{ form.role.label_tag }}
+            {{ form.role }}
+            {{ form.role.errors }}
+         </span>
+      </div>
+      <br />
+      <div>
+         <span>
+            {{ form.speed.label_tag }}
+            {{ form.speed }}
+            {{ form.speed.errors }}
+         </span>
+      </div>
+      <br />
+      <div>
+         <span>
+            {{ form.minion.label_tag }}
+            {{ form.minion }}
+            {{ form.minion.errors }}
+         </span>
+         <span>
+            {{ form.elite.label_tag }}
+            {{ form.elite }}
+            {{ form.elite.errors }}
+         </span>
+		   <span>
+            {{ form.solo.label_tag }}
+            {{ form.solo }}
+            {{ form.solo.errors }}
+         </span>
+      </div>
+      <br />
+		<input type="submit" value="Submit" />
 	</form>	
 	<br />
 <a href="{% url bestiary_monsterListing %}">Back to the Monster Listing</a>

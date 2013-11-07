@@ -50,8 +50,8 @@ def editAbility(request,mon_id,form=None,attack_id=None, ability_id=None):
       messages.error(request, "No valid ability referenced.")
       return redirect(reverse('bestiary_monsterDetail', args=[mon_id,]))
    
-   reqForm = form(request.POST or None,instance=refObj)
-   if request.POST and reqForm.is_valid():
+   reqForm = form(monster, data=request.POST or None, instance=refObj)
+   if reqForm.is_valid():
       reqForm.save()
       return redirect(reverse('bestiary_monsterDetail', args=[mon_id,]))
 

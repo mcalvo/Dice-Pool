@@ -11,6 +11,10 @@
             <li><a href="{% url admin:index %}">Admin</a></li>
 			{% endblock %}
 		</ul>
+      <ul class="submenu">
+         {% block submenu %}
+         {% endblock %}
+      </ul>
 	</div>
 {% endblock %}
 {% block body %}
