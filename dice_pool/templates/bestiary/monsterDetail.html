@@ -58,9 +58,9 @@
             <a href="{% url bestiary_rebalanceAttack mon.id attack.id %}">[REBALANCE]</a>
          </FONT>
       </h3>
-      <b>Usage:</b> {{ attack.get_action_display }} -- {{ attack.usage }}{% if attack.bloodiedLimit %}(Usable only when bloodied){% endif %}
+      <b>Usage:</b> {{ attack.get_action_display }} -- {{ attack.usage }}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<b>Range:</b> {{ attack.atkRangeDisplay }}{% if attack.oaFlag %}(Provokes OA){% endif %}
+		<b>Range:</b> {{ attack.atkRangeDisplay }}
       <br />
       {% if attack.trigger %}<b>Trigger</b>: {{ attack.trigger }}<br />{% endif %}
 		<b>Attack:</b><a class="rollLink" onclick="alert(attackPop({{attack.attackBonus}}, '{{ attack.get_targetDefense_display }}'))"> +{{ attack.attackBonus }} vs. {{ attack.get_targetDefense_display }}</a>
@@ -78,12 +78,6 @@
 		<br />
 	   -----
    {% endfor %}
-	<br />
-	<br /><br />
-	<b>Note:</b> If adding effects to the attacks, remove one die of damage per effect.
-	
-	<a href="{% url bestiary_monsterListing %}">Back to the Monster Listing</a>
-	<a href="{% url bestiary_createMonster %}">Add a new monster</a>
 
 <script type="text/javascript">
    var dice = new Dice();

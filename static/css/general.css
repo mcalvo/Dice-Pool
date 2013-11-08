@@ -9,3 +9,7 @@ a.rollLink {
    font-weight: bold;
    color: #6666FF;
 }
+
+.entryForm div, .entryForm span {
+    margin: 5px;
+}

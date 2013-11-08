@@ -170,8 +170,8 @@ class Attack(PowerBase):
    targetDefense = models.CharField(max_length=1,choices=choices.DEFENSES,verbose_name='Target defense') 
    averageDamage = models.IntegerField()
    damageLine = models.CharField(max_length=150)
-   multiStrike = models.BooleanField()
-   onHit = models.CharField(max_length=150,blank=True,null=True)
+   multiStrike = models.BooleanField(verbose_name="Multiple attacks?:")
+   onHit = models.CharField(max_length=150,blank=True,null=True, verbose_name="On hit:")
     
    def __unicode__(self):
       return "%s (%s %s)" % (self.name, self.usage, self.action)

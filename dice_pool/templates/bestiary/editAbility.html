@@ -4,11 +4,112 @@
 	<h3> New Power for {{c.name}} </h3>
 	<p><p>
 	{% if error_message %} <p><strong> {{ error_message }}</strong></p>{% endif %}
-	<form action="." method="post">
+	<form class="entryForm" action="." method="post">
 		{% csrf_token %}
-		
-		{{form.as_p}}
-		
+		<div>
+         <span>
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+         </span>
+      </div>
+      <div>
+         <span>
+            {{ form.usage.label_tag }}
+            {{ form.usage }}
+            {{ form.usage.errors }}
+         </span>
+         <span>
+            {{ form.action.label_tag }}
+            {{ form.action }}
+            {{ form.action.errors }}
+         </span>
+         <span>
+            {{ form.targetDefense.label_tag }}
+            {{ form.targetDefense }}
+            {{ form.targetDefense.errors }}
+         </span>
+      </div>
+      <div>
+         <span>
+            {{ form.range.label_tag }}
+            {{ form.range }}
+            {{ form.range.errors }}
+         </span>
+         <span>
+            {{ form.area.label_tag }}
+            {{ form.area }}
+            {{ form.area.errors }}
+         </span>
+      </div> 
+      <div>
+         <span>
+            {{ form.trigger.label_tag }}
+            {{ form.trigger }}
+            {{ form.trigger.errors }}
+         </span>
+      </div>
+      <div>
+         <span>
+            {{ form.onHit.label_tag }}
+            {{ form.onHit }}
+            {{ form.onHit.errors }}
+         </span>
+      </div>
+      <div>
+         <span>
+            {{ form.effect.label_tag }}
+            {{ form.effect }}
+            {{ form.effect.errors }}
+         </span>
+      </div>
+      <div>
+         <span>
+            {{ form.aftereffect.label_tag }}
+            {{ form.aftereffect }}
+            {{ form.aftereffect.errors }}
+         </span>
+      </div>
+      <h3>Power Details</h3>
+      <div>
+         <span>
+            {{ form.aura.label_tag }}
+            {{ form.aura }}
+            {{ form.aura.errors }}
+         </span>
+         |
+         <span>
+            {{ form.isPassive.label_tag }}
+            {{ form.isPassive }}
+            {{ form.isPassive.errors }}
+         </span>
+      </div>
+      <div>
+         <span>
+            {{ form.isRanged.label_tag }}
+            {{ form.isRanged }}
+            {{ form.isRanged.errors }}
+         </span>
+         |
+         <span>
+            {{ form.oaFlag.label_tag }}
+            {{ form.oaFlag }}
+            {{ form.oaFlag.errors }}
+         </span>
+      </div>
+      <div>
+         <span>
+            {{ form.bloodiedLimit.label_tag }}
+            {{ form.bloodiedLimit }}
+            {{ form.bloodiedLimit.errors }}
+         </span>
+         |
+         <span>
+            {{ form.multiStrike.label_tag }}
+            {{ form.multiStrike }}
+            {{ form.multiStrike.errors }}
+         </span>
+      </div>
 		<input type="submit" value="Create" />
 	</form>
 <br />

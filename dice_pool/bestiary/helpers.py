@@ -80,7 +80,7 @@ def averageDamage(monster,heavyHitter,range,area,limitedUsage,bloodiedLimit,mult
             dmg = 8+round((monster.level+8)*.9678) if area == 0 else 8+round((monster.level+4)*.9678)
          else:
             #At-will single target attack vs at-will area attack 
-            dmg = 8+round((mosnter.level+3)*.9678) if area == 0 else 8+round((monster.level-1)*.9678)
+            dmg = 8+round((monster.level+3)*.9678) if area == 0 else 8+round((monster.level-1)*.9678)
           
       #Non-brute damage
       else:

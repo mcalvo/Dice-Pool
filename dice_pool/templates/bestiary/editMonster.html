@@ -4,7 +4,7 @@
 	<br />
 	<br />
 	{% if error_message %} <p><strong> {{ error_message }}</strong></p>{% endif %}
-	<form action="." method="post">
+	<form class="entryForm" action="." method="post">
 		{% csrf_token %}	
 		<div>
          <span>
@@ -13,7 +13,6 @@
             {{ form.name.errors }}
          </span>
       </div>
-      <br />
       <div>
          <span>
             {{ form.level.label_tag }}
@@ -26,7 +25,6 @@
             {{ form.role.errors }}
          </span>
       </div>
-      <br />
       <div>
          <span>
             {{ form.speed.label_tag }}
@@ -34,7 +32,6 @@
             {{ form.speed.errors }}
          </span>
       </div>
-      <br />
       <div>
          <span>
             {{ form.minion.label_tag }}
@@ -52,7 +49,6 @@
             {{ form.solo.errors }}
          </span>
       </div>
-      <br />
 		<input type="submit" value="Submit" />
 	</form>	
 	<br />
