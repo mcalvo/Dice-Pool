@@ -82,7 +82,22 @@ class Monster(models.Model):
    hDC = models.IntegerField(verbose_name = 'Hard DC')
     
    def __unicode__(self):
-      return "Lvl. %s %s" % (self.level, self.name)
+      output = "Lvl. %s %s" % (self.level, self.name)
+      role = " ("
+      if self.elite:
+         role += "Elite "
+      
+      if self.solo:
+         role += "Solo "
+      
+      role += self.role.__unicode__()
+      
+      if self.minion:
+         role += " Minion"
+      
+      role += ")"
+      output += role
+      return output
    
    def __rebalance__(self):
       self.initiative = self.level * .60
@@ -121,7 +136,6 @@ class PowerBase(models.Model):
    effect = models.CharField(max_length=150,blank=True,null=True)
    aftereffect = models.CharField(max_length=150,blank=True,null=True)
    trigger = models.CharField(max_length=150,blank=True,null=True)
- 
    
    def __unicode__(self):
       return "%s (%s %s power)" % (self.name, self.monster, self.usage)

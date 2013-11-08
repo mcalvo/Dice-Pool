@@ -86,6 +86,12 @@
       var atkRoll = dice.d20();
       atkTotal = atkRoll + attackBonus;
       attackString = "Attack: " + atkRoll + " + " + attackBonus + " = " + atkTotal + " vs. " + defense;
+      if(atkRoll == 20){
+         attackString += "\n*** CRIT! ***";
+      }
+      else if(atkRoll == 1){
+         attackString += "\n*** CRIT FAIL! ***";
+      }
       return attackString;
    }
    
